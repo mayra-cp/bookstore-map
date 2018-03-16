@@ -1,5 +1,35 @@
 var map;
-     var markers = [];
+var markers = [];
+
+  // These are the bookstore locations shown to the user
+  // Normally we'd have these in a database instead.
+var locations = [
+  {
+    title: 'Dog Eared Books', 
+    location: {lat: 37.7612, lng: -122.4348}
+  },{
+    title: 'Russian Hill Bookstore', 
+    location: {lat: 37.7967, lng: -122.4218}
+  },{
+    title: 'City Lights', 
+    location: {lat: 37.7976, lng: -122.4066}
+  },{
+    title: 'Booksmith', 
+    location: {lat: 37.7698, lng: -122.4494}
+  },{
+    title: 'Owl Cave Books', 
+    location: {lat: 37.7627, lng: -122.4143}
+  },{
+    title: 'The Green Arcade', 
+    location: {lat: 37.7733, lng: -122.4219}
+  },{
+    title: 'Alexander Book Company', 
+    location: {lat: 37.7886, lng: -122.4007}
+  },{
+    title: 'Book Passage', 
+    location: {lat: 37.7953, lng: -122.3934}
+  }
+];
 
       // Initialize map function
      function initMap() {
@@ -60,19 +90,7 @@ var map;
           mapTypeControl: false
         });
 
-        // These are the bookstore locations shown to the user
-       // Normally we'd have these in a database instead.
-       var locations = [
-       {title: 'Dog Eared Books', location: {lat: 37.7612, lng: -122.4348}},
-       {title: 'Russian Hill Bookstore', location: {lat: 37.7967, lng: -122.4218}},
-       {title: 'City Lights', location: {lat: 37.7976, lng: -122.4066}},
-       {title: 'Booksmith', location: {lat: 37.7698, lng: -122.4494}},
-       {title: 'Owl Cave Books', location: {lat: 37.7627, lng: -122.4143}},
-       {title: 'The Green Arcade', location: {lat: 37.7733, lng: -122.4219}}
-       ];
-
-       var largeInfowindow = new google.maps.InfoWindow();
-
+      var largeInfowindow = new google.maps.InfoWindow();
 
        // Style the markers a bit. This will be our listing marker icon.
        var defaultIcon = makeMarkerIcon('0091ff');
