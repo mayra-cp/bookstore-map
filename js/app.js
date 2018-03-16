@@ -124,7 +124,7 @@ function initMap() {
     // Push the marker to our array of markers
     markers.push(marker);
     // Extend the boundaries of the map for each marker
-    bounds.extend(marker.position); //NEEDED?
+    // bounds.extend(marker.position); //NEEDED?
     // Create an onclick event to open an infowindow at each marker
     marker.addListener('click', function() {
       populateInfoWindow(this, largeInfowindow);
@@ -138,7 +138,7 @@ function initMap() {
     });
   }
   
-  map.fitBounds(bounds); //NEEDED?
+  // map.fitBounds(bounds); //NEEDED?
 
   document.getElementById('show-bookstores').addEventListener('click', showBookstores);
   document.getElementById('hide-bookstores').addEventListener('click', hideBookstores);
@@ -149,7 +149,7 @@ function initMap() {
   function populateInfoWindow(marker, infowindow) {
     if (infowindow.marker != marker) {
       infowindow.marker = marker;
-      infowindow.setContent('<div>' + marker.title + '</div>' + marker.destinations + '</div>');
+      infowindow.setContent('<div>' + marker.title + '</div>' + marker.description + '</div>');
       infowindow.open(map, marker);
       // Make sure the marker property is cleared if the infowindow is closed
       infowindow.addListener('closeclick', function() {
@@ -157,41 +157,37 @@ function initMap() {
       });
       var streetViewService = new google.maps.StreetViewService();
       var radius = 50;
+    };
   
       // In this case the status is OK, which means the pano was found, compute the 
       // position of the streetview image, then calculate the heading, then get a 
       // panorama from that and set the options
       function getStreetView(data, status) {
         if (status === google.maps.StreetViewStatus.OK) {
-          var nearStreetViewLocation = data.location.latLng;
+          var nearStreetViewLocation = data.location.latlng;
           var heading = google.maps.geometry.spherical.computeHeading(
-              nearStreetViewLocation, marker.position);
-              infowindow.setContent('<div>' + marker.title + '</div><div> id="pano"></div>');
+            nearStreetViewLocation, marker.position);
+          infowindow.setContent('<div>' + marker.title + '</div><div> id="pano"></div>');
         } else {
-            InfoWindow.setContent('<div>' + marker.title + '</div>' + '<div> No Street View Found</div>')
+          infowindow.setContent('<div>' + marker.title + '</div>' + '<div> No Street View Found</div>');
+        }
+        var panoramaOptions = {
+          position: nearStreetViewLocation,
+          pov: {
+            heading: heading,
+            pitch: 30
           }
         }
-          var panoramaOptions = {
-            position: nearStreetViewLocation,
-            pov: {
-                heading: heading,
-                pitch: 30
-              }
-            };
-            var panorama = new google.maps.StreetViewPanorama(
-              document.getElementById('pano'), panoramaOptions);
-            // Use streetview service to get the closest streetview image within
-            // 50 meters of the markers position
-            streetViewService.getPanoramaByLocation(marker.position, radius, getStreetView);
-            // Open the infowindow on the correct marker.
-            infowindow.open(map.marker);
-          }
-        }
+        var panorama = new google.maps.StreetViewPanorama(
+          document.getElementById("pano"), panoramaOptions);
+        streetViewService.getPanoramaByLocation(marker.position, radius, getStreetView);
+        infowindow.open(map.marker);
+      }
+    }
 
      // This function will loop through the markers array and display them all.
      function showBookstores() {
       var bounds = new google.maps.LatLngBounds();
-      // Extend the boundaries of the map for each marker and display the marker
       for (var i = 0; i < markers.length; i++) {
         markers[i].setMap(map);
         bounds.extend(markers[i].position);
@@ -218,4 +214,6 @@ function initMap() {
         scaledSize: new google.maps.Size(21, 34),
       }
       return markerImage;
-    };
+    }
+  }
+   
