@@ -4,7 +4,7 @@ var markers = [];
 var locations = [
   {
     title: 'Dog Eared Books', 
-    description: 'Since 1992, Dog Eared Books has been supplying a book-hungry San Francisco with new, used, and remaindered books in the Mission and Castro districts.',
+    description: 'Since 1992, Dog Eared Books has been supplying San Francisco with new, used, and remaindered books in the Mission and Castro districts.',
     location: {lat: 37.7612, lng: -122.4348}
   },{
     title: 'Russian Hill Bookstore', 
@@ -20,7 +20,7 @@ var locations = [
     location: {lat: 37.7698, lng: -122.4494}
   },{
     title: 'Owl Cave Books', 
-    description: 'Owl Cave Books is a San Francisco-based independent artist-run bookseller and publisher specializing in international contemporary art, theory, culture, and politics.',
+    description: 'Owl Cave Books is an independent artist-run bookseller and publisher specializing in international contemporary art, theory, culture, and politics.',
     location: {lat: 37.7627, lng: -122.4143}
   },{
     title: 'The Green Arcade',
@@ -149,71 +149,70 @@ function initMap() {
   function populateInfoWindow(marker, infowindow) {
     if (infowindow.marker != marker) {
       infowindow.marker = marker;
-      infowindow.setContent('<div>' + marker.title + '</div>' + marker.description + '</div>');
+      infowindow.setContent('');
       infowindow.open(map, marker);
       // Make sure the marker property is cleared if the infowindow is closed
       infowindow.addListener('closeclick', function() {
         infowindow.marker = null;
       });
+
       var streetViewService = new google.maps.StreetViewService();
       var radius = 50;
-    };
-  
-      // In this case the status is OK, which means the pano was found, compute the 
-      // position of the streetview image, then calculate the heading, then get a 
-      // panorama from that and set the options
+
       function getStreetView(data, status) {
-        if (status === google.maps.StreetViewStatus.OK) {
-          var nearStreetViewLocation = data.location.latlng;
+        if (status == google.maps.StreetViewStatus.OK) {
+          var nearStreetViewLocation = data.location.latLng;
           var heading = google.maps.geometry.spherical.computeHeading(
             nearStreetViewLocation, marker.position);
-          infowindow.setContent('<div>' + marker.title + '</div><div> id="pano"></div>');
+            infowindow.setContent('<div class="bold">' + marker.title + '</div><div id="pano"></div>');
+            var panoramaOptions = {
+              position: nearStreetViewLocation,
+              pov: {
+                heading: heading,
+                pitch: 30
+              }
+            };
+          var panorama = new google.maps.StreetViewPanorama(
+            document.getElementById('pano'), panoramaOptions);
         } else {
-          infowindow.setContent('<div>' + marker.title + '</div>' + '<div> No Street View Found</div>');
+          infowindow.setContent('<div><b>' + marker.title + '</b></div>' + '<div> No Street View Found</div>');
         }
-        var panoramaOptions = {
-          position: nearStreetViewLocation,
-          pov: {
-            heading: heading,
-            pitch: 30
-          }
-        }
-        var panorama = new google.maps.StreetViewPanorama(
-          document.getElementById("pano"), panoramaOptions);
-        streetViewService.getPanoramaByLocation(marker.position, radius, getStreetView);
-        infowindow.open(map.marker);
       }
+
+      streetViewService.getPanoramaByLocation(marker.position, radius, getStreetView);
+      infowindow.open(map, marker);
+    };
+  }
+
+  // This function will loop through the markers array and display them all.
+  function showBookstores() {
+    var bounds = new google.maps.LatLngBounds();
+    for (var i = 0; i < markers.length; i++) {
+      markers[i].setMap(map);
+      bounds.extend(markers[i].position);
     }
+    map.fitBounds(bounds);
+  }
 
-     // This function will loop through the markers array and display them all.
-     function showBookstores() {
-      var bounds = new google.maps.LatLngBounds();
-      for (var i = 0; i < markers.length; i++) {
-        markers[i].setMap(map);
-        bounds.extend(markers[i].position);
-      }
-      map.fitBounds(bounds);
-     }
-
-     // This function will loop through the listings and hide them all.
-     function hideBookstores() {
-      for (var i = 0; i < markers.length; i++) {
-        markers[i].setMap(null);
-      }
-    }
-
-     // This function takes in a COLOR, and then creates a new marker
-     // icon of that color. The icon will be 21 px wide by 34 high, have an origin 
-     // of 0, 0 and be anchored at 10, 34.
-     function makeMarkerIcon(markerColor) {
-      var markerImage = {
-        url: 'img/book-marker.png', //attr: https://pixabay.com/en/book-blue-closed-literature-297246/
-        size:new google.maps.Size(21, 34),
-        origin: new google.maps.Point(0, 0),
-        anchor: new google.maps.Point(10, 34),
-        scaledSize: new google.maps.Size(21, 34),
-      }
-      return markerImage;
+   // This function will loop through the listings and hide them all.
+  function hideBookstores() {
+    for (var i = 0; i < markers.length; i++) {
+      markers[i].setMap(null);
     }
   }
-   
+
+  // This function takes in a COLOR, and then creates a new marker
+  // icon of that color. The icon will be 21 px wide by 34 high, have an origin 
+  // of 0, 0 and be anchored at 10, 34.
+  function makeMarkerIcon(markerColor) {
+    var markerImage = {
+      url: 'img/book-marker.png', //attr: https://pixabay.com/en/book-blue-closed-literature-297246/
+      size:new google.maps.Size(21, 34),
+      origin: new google.maps.Point(0, 0),
+      anchor: new google.maps.Point(10, 34),
+      scaledSize: new google.maps.Size(21, 34),
+    }
+    return markerImage;
+  }
+}
+ 
