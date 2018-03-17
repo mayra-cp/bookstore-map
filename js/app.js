@@ -1,41 +1,5 @@
 var map;
 var markers = [];
-// These are the bookstore locations shown to the user
-var locations = [
-  {
-    title: 'Dog Eared Books', 
-    description: 'Since 1992, Dog Eared Books has been supplying San Francisco with new, used, and remaindered books in the Mission and Castro districts.',
-    location: {lat: 37.7612, lng: -122.4348}
-  },{
-    title: 'Russian Hill Bookstore', 
-    description: 'Russian Hill Bookstore, established in 1993, is one of the last family-owned used and new bookstores in San Francisco.',
-    location: {lat: 37.7967, lng: -122.4218}
-  },{
-    title: 'City Lights', 
-    description: 'City Lights is a landmark independent bookstore and publisher that specializes in world literature, the arts, and progressive politics.',
-    location: {lat: 37.7976, lng: -122.4066}
-  },{
-    title: 'Booksmith', 
-    description: '',
-    location: {lat: 37.7698, lng: -122.4494}
-  },{
-    title: 'Owl Cave Books', 
-    description: 'Owl Cave Books is an independent artist-run bookseller and publisher specializing in international contemporary art, theory, culture, and politics.',
-    location: {lat: 37.7627, lng: -122.4143}
-  },{
-    title: 'The Green Arcade',
-    description: 'Specializing in books on San Francisco & California history and more.',
-    location: {lat: 37.7733, lng: -122.4219}
-  },{
-    title: 'Alexander Book Company',
-    description: 'Your Independent Downtown San Francisco Bookstore.', 
-    location: {lat: 37.7886, lng: -122.4007}
-  },{
-    title: 'Book Passage',
-    description: 'Book Passage serves visitors and locals, offering regional maps, guidebooks, and Bay Area literature, postcards and gifts.', 
-    location: {lat: 37.7953, lng: -122.3934}
-  }
-];
 
 // Initialize map function
 function initMap() {
@@ -97,9 +61,49 @@ function initMap() {
     mapTypeControl: false
   });
 
-  var largeInfowindow = new google.maps.InfoWindow();
-  // var bounds = new google.maps.LatLngBounds(); DO I NEED THIS??
+  // These are the bookstore locations shown to the user
+  var locations = [
+    {
+      title: 'Dog Eared Books (Castro)', 
+      description: 'Supplying San Francisco with new, used, and remaindered books in the Mission and Castro districts.',
+      location: {lat: 37.76120877479613, lng: -122.43490211719666}
+    },{
+      title: 'Dog Eared Books (Mission)', 
+      description: 'Supplying San Francisco with new, used, and remaindered books in the Mission and Castro districts.',
+      location: {lat: 37.758404, lng: -122.42150049999998}
+    },{
+      title: 'Russian Hill Bookstore', 
+      description: 'One of the last family-owned used and new bookstores in San Francisco.',
+      location: {lat: 37.796738532096256, lng: -122.42186062209015}
+    },{
+      title: 'City Lights', 
+      description: 'A landmark independent bookstore and publisher that specializes in world literature, the arts, and progressive politics.',
+      location: {lat: 37.79764968857877, lng: -122.40656030000002}
+    },{
+      title: 'Booksmith', 
+      description: 'Vibrant, roomy independent bookshop offering author readings, best-sellers & hard-to-find titles.',
+      location: {lat: 37.7698, lng: -122.4494}
+    },{
+      title: 'Owl Cave Books', 
+      description: 'An independent artist-run bookseller and publisher specializing in international contemporary art, theory, culture, and politics.',
+      location: {lat: 37.76270299999999, lng: -122.41428100000002}
+    },{
+      title: 'The Green Arcade',
+      description: 'Specializing in books on San Francisco & California history.',
+      location: {lat: 37.7733, lng: -122.4219}
+    },{
+      title: 'Alexander Book Company',
+      description: 'Your independent downtown San Francisco bookstore.', 
+      location: {lat: 37.7886, lng: -122.4007}
+    },{
+      title: 'Book Passage',
+      description: 'Serves visitors and locals, offering regional maps, guidebooks, and Bay Area literature, postcards and gifts.', 
+      location: {lat: 37.795274, lng: -122.39342099999999}
+    }
+  ];
 
+  var largeInfowindow = new google.maps.InfoWindow();
+ 
   // Style the markers a bit. This will be our listing marker icon.
   var defaultIcon = makeMarkerIcon('0091ff');
 
@@ -129,6 +133,7 @@ function initMap() {
     marker.addListener('click', function() {
       populateInfoWindow(this, largeInfowindow);
     });
+
     // Two event listeners - one for mouseover, one for mouseout, to changethe colors back and forth
     marker.addListener('mouseover', function() {
       this.setIcon(highlightedIcon);
@@ -137,13 +142,16 @@ function initMap() {
       this.setIcon(defaultIcon);
     });
   }
-  
-  // map.fitBounds(bounds); //NEEDED?
 
   document.getElementById('show-bookstores').addEventListener('click', showBookstores);
   document.getElementById('hide-bookstores').addEventListener('click', hideBookstores);
 
-  // This function populates the infowindow when the marker is clicked. We'll only allow one infowindow which will open at the marker that is clicked, and populate based
+  document.getElementById('zoom-to-area').addEventListener('click', function() {
+    zoomToArea();
+  });
+}
+
+   // This function populates the infowindow when the marker is clicked. We'll only allow one infowindow which will open at the marker that is clicked, and populate based
   // on that markers position.
 
   function populateInfoWindow(marker, infowindow) {
@@ -164,26 +172,25 @@ function initMap() {
           var nearStreetViewLocation = data.location.latLng;
           var heading = google.maps.geometry.spherical.computeHeading(
             nearStreetViewLocation, marker.position);
-            infowindow.setContent('<div class="bold">' + marker.title + '</div><div id="pano"></div>');
+            infowindow.setContent('<div class="bold">' + marker.title + '</div>' + marker.description + '</div><div id="pano"></div>');
             var panoramaOptions = {
               position: nearStreetViewLocation,
               pov: {
                 heading: heading,
-                pitch: 30
+                pitch: 5
               }
             };
           var panorama = new google.maps.StreetViewPanorama(
             document.getElementById('pano'), panoramaOptions);
         } else {
-          infowindow.setContent('<div><b>' + marker.title + '</b></div>' + '<div> No Street View Found</div>');
+          infowindow.setContent('<div class="bold">' + marker.title + '</div>' + marker.description + '</div><div> No Street View Found</div>');
         }
       }
 
       streetViewService.getPanoramaByLocation(marker.position, radius, getStreetView);
       infowindow.open(map, marker);
-    };
+    }
   }
-
   // This function will loop through the markers array and display them all.
   function showBookstores() {
     var bounds = new google.maps.LatLngBounds();
@@ -193,26 +200,44 @@ function initMap() {
     }
     map.fitBounds(bounds);
   }
-
-   // This function will loop through the listings and hide them all.
+  // This function will loop through the listings and hide them all.
   function hideBookstores() {
     for (var i = 0; i < markers.length; i++) {
       markers[i].setMap(null);
     }
   }
 
+  //This function zooms into a specific area from a user's input
+  function zoomToArea() {
+    var geocoder = new google.maps.Geocoder();
+    var address = document.getElementById('zoom-to-area-text').value;
+    if (address == '') {
+      window.alert('You must enter an area, or address.')
+    } else {
+      geocoder.geocode(
+      { address: address,
+        componentRestrictions: {locality: 'San Francisco'}
+      }, function(results, status) {
+        if (status == google.maps.GeocoderStatus.OK) {
+          map.setCenter(results[0].geometry.location);
+          map.setZoom(15);
+        } else {
+          window.alert('We could not find that location - try entering a more' + ' specific place.');
+        }
+      });
+    }
+  }
   // This function takes in a COLOR, and then creates a new marker
   // icon of that color. The icon will be 21 px wide by 34 high, have an origin 
   // of 0, 0 and be anchored at 10, 34.
   function makeMarkerIcon(markerColor) {
-    var markerImage = {
-      url: 'img/book-marker.png', //attr: https://pixabay.com/en/book-blue-closed-literature-297246/
-      size:new google.maps.Size(21, 34),
-      origin: new google.maps.Point(0, 0),
-      anchor: new google.maps.Point(10, 34),
-      scaledSize: new google.maps.Size(21, 34),
-    }
-    return markerImage;
+        var markerImage = new google.maps.MarkerImage(
+          'img/book-marker.png',
+          new google.maps.Size(21, 34),
+          new google.maps.Point(0, 0),
+          new google.maps.Point(10, 34),
+          new google.maps.Size(21,34));
+        return markerImage;
   }
-}
+// }
  
