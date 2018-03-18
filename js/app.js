@@ -61,15 +61,15 @@ function initMap() {
     mapTypeControl: false
   });
 
-  // These are the bookstore locations shown to the user
+  // Bookstore locations shown to User
   var locations = [
     {
       title: 'Dog Eared Books (Castro)', 
-      description: 'Supplying San Francisco with new, used, and remaindered books in the Mission and Castro districts.',
+      description: 'Supplying San Francisco with new, used, and remaindered books.',
       location: {lat: 37.76120877479613, lng: -122.43490211719666}
     },{
       title: 'Dog Eared Books (Mission)', 
-      description: 'Supplying San Francisco with new, used, and remaindered books in the Mission and Castro districts.',
+      description: 'Supplying San Francisco with new, used, and remaindered books.',
       location: {lat: 37.758404, lng: -122.42150049999998}
     },{
       title: 'Russian Hill Bookstore', 
@@ -77,15 +77,15 @@ function initMap() {
       location: {lat: 37.796738532096256, lng: -122.42186062209015}
     },{
       title: 'City Lights', 
-      description: 'A landmark independent bookstore and publisher that specializes in world literature, the arts, and progressive politics.',
+      description: 'Specializes in world literature, the arts, and progressive politics.',
       location: {lat: 37.79764968857877, lng: -122.40656030000002}
     },{
       title: 'Booksmith', 
-      description: 'Vibrant, roomy independent bookshop offering author readings, best-sellers & hard-to-find titles.',
+      description: 'Offering author readings, best-sellers & hard-to-find titles.',
       location: {lat: 37.7698, lng: -122.4494}
     },{
       title: 'Owl Cave Books', 
-      description: 'An independent artist-run bookseller and publisher specializing in international contemporary art, theory, culture, and politics.',
+      description: 'Specializing in international contemporary art, theory, culture, and politics.',
       location: {lat: 37.76270299999999, lng: -122.41428100000002}
     },{
       title: 'The Green Arcade',
@@ -97,22 +97,21 @@ function initMap() {
       location: {lat: 37.7886, lng: -122.4007}
     },{
       title: 'Book Passage',
-      description: 'Serves visitors and locals, offering regional maps, guidebooks, and Bay Area literature, postcards and gifts.', 
+      description: 'Offering regional maps, guidebooks, Bay Area literature, postcards and gifts.', 
       location: {lat: 37.795274, lng: -122.39342099999999}
     }
   ];
 
   var largeInfowindow = new google.maps.InfoWindow();
  
-  // Style the markers a bit. This will be our listing marker icon.
+  // This will be our listing marker icon
   var defaultIcon = makeMarkerIcon('0091ff');
 
-  // Create a "highlighted location" marker color for when the user mouses over the marker.
+  // Create a "highlighted location" marker color for when the user mouses over the marker. Currently does NOT work
   var highlightedIcon = makeMarkerIcon('ffff24');
 
-  // The following group uses the location array to create an array of markers on initialize
+  // Use a location array to create an array of markers on initialize
   for (var i = 0; i < locations.length; i++) {
-    // Get the position from the local array.
     var position = locations[i].location;
     var title = locations[i].title;
     var description = locations[i].description;
@@ -125,16 +124,13 @@ function initMap() {
       animation: google.maps.Animation.DROP,
       id: i
     });
-    // Push the marker to our array of markers
     markers.push(marker);
-    // Extend the boundaries of the map for each marker
-    // bounds.extend(marker.position); //NEEDED?
     // Create an onclick event to open an infowindow at each marker
     marker.addListener('click', function() {
       populateInfoWindow(this, largeInfowindow);
     });
 
-    // Two event listeners - one for mouseover, one for mouseout, to changethe colors back and forth
+    // Two event listeners to change colors back and forth
     marker.addListener('mouseover', function() {
       this.setIcon(highlightedIcon);
     });
@@ -149,17 +145,18 @@ function initMap() {
   document.getElementById('zoom-to-area').addEventListener('click', function() {
     zoomToArea();
   });
+  document.getElementById('search-within-time').addEventListener('click', function() {
+    searchWithinTime();
+  });
 }
 
-   // This function populates the infowindow when the marker is clicked. We'll only allow one infowindow which will open at the marker that is clicked, and populate based
-  // on that markers position.
-
+   // This function populates the infowindow when the marker is clicked
   function populateInfoWindow(marker, infowindow) {
     if (infowindow.marker != marker) {
       infowindow.marker = marker;
       infowindow.setContent('');
       infowindow.open(map, marker);
-      // Make sure the marker property is cleared if the infowindow is closed
+      // Make sure marker property is cleared if infowindow is closed
       infowindow.addListener('closeclick', function() {
         infowindow.marker = null;
       });
@@ -207,6 +204,19 @@ function initMap() {
     }
   }
 
+  // This function takes in a COLOR, and then creates a new marker
+  // icon of that color. The icon will be 21 px wide by 34 high, have an origin 
+  // of 0, 0 and be anchored at 10, 34.
+  function makeMarkerIcon(markerColor) {
+        var markerImage = new google.maps.MarkerImage(
+          'img/book-marker.png',
+          new google.maps.Size(21, 34),
+          new google.maps.Point(0, 0),
+          new google.maps.Point(10, 34),
+          new google.maps.Size(21,34));
+        return markerImage;
+  }
+
   //This function zooms into a specific area from a user's input
   function zoomToArea() {
     var geocoder = new google.maps.Geocoder();
@@ -227,17 +237,98 @@ function initMap() {
       });
     }
   }
-  // This function takes in a COLOR, and then creates a new marker
-  // icon of that color. The icon will be 21 px wide by 34 high, have an origin 
-  // of 0, 0 and be anchored at 10, 34.
-  function makeMarkerIcon(markerColor) {
-        var markerImage = new google.maps.MarkerImage(
-          'img/book-marker.png',
-          new google.maps.Size(21, 34),
-          new google.maps.Point(0, 0),
-          new google.maps.Point(10, 34),
-          new google.maps.Size(21,34));
-        return markerImage;
+
+  // This function allows user to nput a desired travel time & only show listings within that travel time
+  function searchWithinTime() {
+    var distanceMatrixService = new google.maps.DistanceMatrixService;
+    var address = document.getElementById('search-within-time-text').value;
+    if (address == '') {
+      window.alert('You must enter an address.');
+    } else {
+      hideBookstores();
+      //put all origins into origins matrix
+      var origins = [];
+      for (var i = 0; i < markers.length; i++) {
+        origins[i] = markers[i].position;
+      }
+      var destination = address;
+      var mode = document.getElementById('mode').value;
+      // Get all info for distances between them.
+      distanceMatrixService.getDistanceMatrix({
+        origins: origins,
+        destinations: [destination],
+        travelMode: google.maps.TravelMode[mode],
+        unitSystem: google.maps.UnitSystem.IMPERIAL,
+      }, function(response, status) {
+        if (status !== google.maps.DistanceMatrixStatus.OK) {
+          window.alert('Error was: ' + status);
+        } else {
+          displayMarkersWithinTime(response);
+        }
+      });
+    }
   }
-// }
+
+  // Function will go through each result -- if distance is less than the value, show it on map.
+  function displayMarkersWithinTime(response) {
+    var maxDuration = document.getElementById('max-duration').value;
+    var origins = response.originAddresses;
+    var destinations = response.destinationAdresses;
+    var atLeastOne = false;
+    for (var i = 0; i < origins.length; i++) {
+      var results = response.rows[i].elements;
+      for (var j = 0; j < results.length; j++) {
+        var element = results[j];
+        if (element.status === "OK") {
+          var distanceText = element.distance.text;
+          var duration = element.duration.value / 60;
+          var durationText = element.duration.text;
+          if (duration <= maxDuration) {
+            markers[i].setMap(map);
+            atLeastOne = true;
+            var infowindow = new google.maps.InfoWindow({
+              content: durationText + ' away, ' + distanceText + 
+              '<div><input type=\"button\" value=\"View Route\" onclick =' + 
+              '\"displayDirections(&quot;' + origins[i] + '&quot;);\"></input></div>'
+            });
+            infowindow.open(map, markers[i]);
+            markers[i].infowindow = infowindow;
+            google.maps.event.addListener(markers[i], 'click', function() {
+              this.infowindow.close();
+            });
+          }
+        }
+      }
+    }
+    if (!atLeastOne) {
+      window.alert('We could not find any locations within that distance!');
+    }
+  }
+
+  // When user selects "show route" on a marker. Will display route on map
+  function displayDirections(origin) {
+    hideBookstores();
+    var directionsService = new google.maps.DirectionsService;
+    var destinationAddress =
+      document.getElementById('search-within-time-text').value;
+    var mode = document.getElementById('mode').value;
+    directionsService.route({
+      origin: origin,
+      destination: destinationAddress,
+      travelMode: google.maps.TravelMode[mode]
+    }, function(response, status) {
+      if (status === google.maps.DirectionsStatus.OK) {
+        var directionsDisplay = new google.maps.DirectionsRenderer({
+          map: map,
+          directions: response,
+          draggagle: true,
+          polylineOptions: {
+            strokeColor: 'green'
+          }
+        });
+      } else {
+        window.alert('Directions request failed do to ' + status);
+      }
+    });
+  }
  

@@ -1,52 +1,114 @@
+/* GENERAL STYLES*/
 html, body { 
   height: 100%; 
   margin: 0; 
   padding: 0;  
-  font-family: 'Open Sans Condensed', 
-  sans-serif; color: #cd5360;
-  text-align: center; }
+  font-family: 'Open Sans Condensed', sans-serif; 
+  color: #3088d3;
+  text-align: center;
+}
 
 h1 { 
   font-family: 'Neuton', serif;
   color: #286da8;
+  font-size: 40px;
  }
 
-     #map {
-      bottom: 0px;
-      height: 100%;
-      left: 362px;
-      position: absolute;
-      right: 0px;
-     }
-
- #pano {
-        width: 100%;
-        height: 200px;
-      }
-
-     .options-box {
-      background: #fff;
-      border: 1px solid #999;
-      border-radius: 3px;
-      height: 100%;
-      line-height: 35px;
-      padding: 10px 10px 30px 10px;
-      text-align: center;
-      width: 340px;
-     }
-#zoom-to-area-text {
-  position: relative;
-  width: 70%;
+h3 {
+  font-size: 23px;
+  color: #cd5360;
 }
 
-#zoom-to-area {
-  width: 24%;
+.container {
+  height: 100%;
+  position: relative;
+}
+
+/* MAP STYLES*/
+
+#map {
+  bottom: 0px;
+  height: 100%;
+  left: 362px;
+  position: absolute;
+  right: 0px;
+}
+
+#pano {
+  width: 100%;
+  height: 200px;
 }
 
 .bold {
   font-weight: bold;
   font-size: 15px;
 }
+
+/* OPTIONS BOX STYLES*/
+
+.options-box {
+  background: #fff;
+  border: 1px solid #999;
+  border-radius: 3px;
+  height: 100%;
+  line-height: 35px;
+  padding: 10px 10px 30px 10px;
+  text-align: center;
+  width: 340px;
+}
+
+#hide-bookstores, 
+#show-bookstores,
+#zoom-to-area,
+#search-within-time,
+#zoom-to-area-text,
+#search-within-time-text,
+#mode,
+#max-duration {
+  font-family: 'Open Sans Condensed', sans-serif;
+}
+
+#hide-bookstores, 
+#show-bookstores,
+#zoom-to-area,
+#search-within-time {
+  font-size: 13px;
+  border-radius: 5px;
+  background-color: #3088d3;
+  color: white;
+  padding: 7px 15px;
+  letter-spacing: 1px;
+}
+
+#hide-bookstores, 
+#show-bookstores {
+  width: 48%;
+}
+
+#zoom-to-area,
+#search-within-time {
+  width: 16%;
+}
+
+#zoom-to-area-text,
+#search-within-time-text {
+  position: relative;
+  width: 85%;
+  padding: 7px 15px;
+  font-size: 15px;
+}
+
+#mode,
+#max-duration {
+  position: relative;
+  background-color: white;
+  width: 29%;
+  box-shadow: 0 4px 12px 0 rgba(0,0,0,0.2);
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 12px;
+}
+
 
 
 
