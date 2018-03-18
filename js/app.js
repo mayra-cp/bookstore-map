@@ -195,7 +195,7 @@ function initMap() {
       infowindow.open(map, marker);
     }
   }
-  // This function will loop through the markers array and display them all.
+  // Loop through the markers array and display them all
   function showBookstores() {
     var bounds = new google.maps.LatLngBounds();
     for (var i = 0; i < markers.length; i++) {
@@ -204,16 +204,14 @@ function initMap() {
     }
     map.fitBounds(bounds);
   }
-  // This function will loop through the listings and hide them all.
+  // Loop through the listings and hide them all
   function hideBookstores() {
     for (var i = 0; i < markers.length; i++) {
       markers[i].setMap(null);
     }
   }
 
-  // This function takes in a COLOR, and then creates a new marker
-  // icon of that color. The icon will be 21 px wide by 34 high, have an origin 
-  // of 0, 0 and be anchored at 10, 34.
+  // Intended to make new marker with color but instead shows new icon imgs --- COLOR CHANGE NOT WORKING 
   function makeMarkerIcon(markerColor) {
         var markerImage = new google.maps.MarkerImage(
           'img/book-marker.png',
@@ -224,7 +222,7 @@ function initMap() {
         return markerImage;
   }
 
-  //This function zooms into a specific area from a user's input
+  // Zooms into a specific area from the User's input
   function zoomToArea() {
     var geocoder = new google.maps.Geocoder();
     var address = document.getElementById('zoom-to-area-text').value;
@@ -245,7 +243,7 @@ function initMap() {
     }
   }
 
-  // This function allows user to nput a desired travel time & only show listings within that travel time
+  // Allows User to input a desired travel time & only show listings within that travel time
   function searchWithinTime() {
     var distanceMatrixService = new google.maps.DistanceMatrixService;
     var address = document.getElementById('search-within-time-text').value;
@@ -253,14 +251,12 @@ function initMap() {
       window.alert('You must enter an address.');
     } else {
       hideBookstores();
-      //put all origins into origins matrix
       var origins = [];
       for (var i = 0; i < markers.length; i++) {
         origins[i] = markers[i].position;
       }
       var destination = address;
       var mode = document.getElementById('mode').value;
-      // Get all info for distances between them.
       distanceMatrixService.getDistanceMatrix({
         origins: origins,
         destinations: [destination],
@@ -276,7 +272,7 @@ function initMap() {
     }
   }
 
-  // Function will go through each result -- if distance is less than the value, show it on map.
+  // Go through each result -- if distance is less than the value, show it on map
   function displayMarkersWithinTime(response) {
     var maxDuration = document.getElementById('max-duration').value;
     var origins = response.originAddresses;
@@ -312,7 +308,7 @@ function initMap() {
     }
   }
 
-  // When user selects "show route" on a marker. Will display route on map
+  // When User selects "show route" on a marker, will display route on map
   function displayDirections(origin) {
     hideBookstores();
     var directionsService = new google.maps.DirectionsService;
