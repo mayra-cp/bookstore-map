@@ -61,6 +61,13 @@ function initMap() {
     mapTypeControl: false
   });
 
+  // Autocomplete for use in the search within time entry bos
+  var timeAutocomplete = new google.maps.places.Autocomplete(
+    document.getElementById('search-within-time-text'));
+  var zoomAutocomplete = new google.maps.places.Autocomplete(
+    document.getElementById('zoom-to-area-text'));
+  zoomAutocomplete.bindTo('bounds', map);
+
   // Bookstore locations shown to User
   var locations = [
     {
