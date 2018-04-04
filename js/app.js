@@ -146,6 +146,21 @@ function initMap() {
     });
   }
 
+  var acc = document.getElementById('show-bookstores');
+  var i;
+
+  for (i = 0; i < acc.length; i++) {
+    acc[i].addEventListener('click', function() {
+      this.idList.toggle('active');
+      var panel = this.nextElementSibling;
+      if (panel.style.maxHeight){
+        panel.style.maxHeight = null;
+      } else {
+        panel.style.maxHeight = panel.scrollHeight + "px";
+      }
+    });
+  }
+
   document.getElementById('show-bookstores').addEventListener('click', showBookstores);
   document.getElementById('hide-bookstores').addEventListener('click', hideBookstores);
 

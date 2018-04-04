@@ -22,12 +22,14 @@
       <div>
         <input id="show-bookstores" type="button" value="Show Bookstores">
         <input id="hide-bookstores" type="button" value="Hide Bookstores">
-        <ul data-bind="foreach: locations">
-          <li>
-            <span data-bind="text: title"></span>
-            <span data-bind="text: description"></span>
-          </li>
-        </ul>
+        <div class="panel">
+          <ul data-bind="foreach: locations">
+            <li>
+              <span data-bind="text: title"></span>
+              <span data-bind="text: description"></span>
+            </li>
+          </ul>
+        </div>
       </div>
       <hr>
       <div>

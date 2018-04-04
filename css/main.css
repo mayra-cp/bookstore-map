@@ -83,6 +83,15 @@ h3 {
 #hide-bookstores, 
 #show-bookstores {
   width: 48%;
+  cursor: pointer;
+  transition: 0.4s;
+}
+
+.panel {
+  padding: 0 18px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
 }
 
 #zoom-to-area,
