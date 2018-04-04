@@ -16,12 +16,18 @@
  </head>
  <body>
   <div class="container">
-    <div class="options-box">
+    <div class="options-box" data-bind="with:currentLocation">
       <h1>Books by the Bay Map</h1>
       <h3>Find a bookstore in San Francisco</h3>
       <div>
         <input id="show-bookstores" type="button" value="Show Bookstores">
         <input id="hide-bookstores" type="button" value="Hide Bookstores">
+        <ul data-bind="foreach: locations">
+          <li>
+            <span data-bind="text: title"></span>
+            <span data-bind="text: description"></span>
+          </li>
+        </ul>
       </div>
       <hr>
       <div>

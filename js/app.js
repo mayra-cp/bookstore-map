@@ -1,6 +1,47 @@
 var map;
 var markers = [];
 
+// Bookstore locations shown to User
+var locations = [
+  {
+    title: 'Dog Eared Books (Castro)', 
+    description: 'Supplying San Francisco with new, used, and remaindered books.',
+    location: {lat: 37.76120877479613, lng: -122.43490211719666}
+  },{
+    title: 'Dog Eared Books (Mission)', 
+    description: 'Supplying San Francisco with new, used, and remaindered books.',
+    location: {lat: 37.758404, lng: -122.42150049999998}
+  },{
+    title: 'Russian Hill Bookstore', 
+    description: 'One of the last family-owned used and new bookstores in San Francisco.',
+    location: {lat: 37.796738532096256, lng: -122.42186062209015}
+  },{
+    title: 'City Lights', 
+    description: 'Specializes in world literature, the arts, and progressive politics.',
+    location: {lat: 37.79764968857877, lng: -122.40656030000002}
+  },{
+    title: 'Booksmith', 
+    description: 'Offering author readings, best-sellers & hard-to-find titles.',
+    location: {lat: 37.7698, lng: -122.4494}
+  },{
+    title: 'Owl Cave Books', 
+    description: 'Specializing in international contemporary art, theory, culture, and politics.',
+    location: {lat: 37.76270299999999, lng: -122.41428100000002}
+  },{
+    title: 'The Green Arcade',
+    description: 'Specializing in books on San Francisco & California history.',
+    location: {lat: 37.7733, lng: -122.4219}
+  },{
+    title: 'Alexander Book Company',
+    description: 'Your independent downtown San Francisco bookstore.', 
+    location: {lat: 37.7886, lng: -122.4007}
+  },{
+    title: 'Book Passage',
+    description: 'Offering regional maps, guidebooks, Bay Area literature, postcards and gifts.', 
+    location: {lat: 37.795274, lng: -122.39342099999999}
+  }
+];
+
 // Initialize map function
 function initMap() {
   //Adds styling to map
@@ -67,47 +108,6 @@ function initMap() {
   var zoomAutocomplete = new google.maps.places.Autocomplete(
     document.getElementById('zoom-to-area-text'));
   zoomAutocomplete.bindTo('bounds', map);
-
-  // Bookstore locations shown to User
-  var locations = [
-    {
-      title: 'Dog Eared Books (Castro)', 
-      description: 'Supplying San Francisco with new, used, and remaindered books.',
-      location: {lat: 37.76120877479613, lng: -122.43490211719666}
-    },{
-      title: 'Dog Eared Books (Mission)', 
-      description: 'Supplying San Francisco with new, used, and remaindered books.',
-      location: {lat: 37.758404, lng: -122.42150049999998}
-    },{
-      title: 'Russian Hill Bookstore', 
-      description: 'One of the last family-owned used and new bookstores in San Francisco.',
-      location: {lat: 37.796738532096256, lng: -122.42186062209015}
-    },{
-      title: 'City Lights', 
-      description: 'Specializes in world literature, the arts, and progressive politics.',
-      location: {lat: 37.79764968857877, lng: -122.40656030000002}
-    },{
-      title: 'Booksmith', 
-      description: 'Offering author readings, best-sellers & hard-to-find titles.',
-      location: {lat: 37.7698, lng: -122.4494}
-    },{
-      title: 'Owl Cave Books', 
-      description: 'Specializing in international contemporary art, theory, culture, and politics.',
-      location: {lat: 37.76270299999999, lng: -122.41428100000002}
-    },{
-      title: 'The Green Arcade',
-      description: 'Specializing in books on San Francisco & California history.',
-      location: {lat: 37.7733, lng: -122.4219}
-    },{
-      title: 'Alexander Book Company',
-      description: 'Your independent downtown San Francisco bookstore.', 
-      location: {lat: 37.7886, lng: -122.4007}
-    },{
-      title: 'Book Passage',
-      description: 'Offering regional maps, guidebooks, Bay Area literature, postcards and gifts.', 
-      location: {lat: 37.795274, lng: -122.39342099999999}
-    }
-  ];
 
   var largeInfowindow = new google.maps.InfoWindow();
  
@@ -334,4 +334,24 @@ function initMap() {
       }
     });
   }
+
+  var Location = function(data) {
+    this.title = ko.observable(data.title);
+    this.description = ko.observable(data.description);
+    this.location = ko.observable(data.location);
+  }
+
+  var ViewModel = function() {
+    var self = this;
+
+    this.locationsList = ko.observableArray([]);
+
+    locations.forEach(function(locationsItem){
+      self.locationsList.push( new Location(locationsItem) );
+    });
+
+    this.currentLocation = ko.observable( this.locationsList()[0] );
+  }
+
+  ko.applyBindings(new ViewModel());
  
