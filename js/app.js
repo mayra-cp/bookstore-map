@@ -350,6 +350,7 @@ function initMap() {
     });
   }
 
+
   var Location = function(data) {
     this.title = ko.observable(data.title);
     this.description = ko.observable(data.description);
