@@ -164,9 +164,10 @@ function initMap() {
   document.getElementById('show-bookstores').addEventListener('click', showBookstores);
   document.getElementById('hide-bookstores').addEventListener('click', hideBookstores);
 
-  document.getElementById('zoom-to-area').addEventListener('click', function() {
-    zoomToArea();
-  });
+  // REMOVED FOR THIS VERSION BUT MAY USE LATER
+  // document.getElementById('zoom-to-area').addEventListener('click', function() {
+  //   zoomToArea();
+  // });
   document.getElementById('search-within-time').addEventListener('click', function() {
     searchWithinTime();
   });
@@ -236,27 +237,27 @@ function initMap() {
           new google.maps.Size(21,34));
         return markerImage;
   }
-
-  // Zooms into a specific area from the User's input
-  function zoomToArea() {
-    var geocoder = new google.maps.Geocoder();
-    var address = document.getElementById('zoom-to-area-text').value;
-    if (address == '') {
-      window.alert('You must enter an area, or address.')
-    } else {
-      geocoder.geocode(
-      { address: address,
-        componentRestrictions: {locality: 'San Francisco'}
-      }, function(results, status) {
-        if (status == google.maps.GeocoderStatus.OK) {
-          map.setCenter(results[0].geometry.location);
-          map.setZoom(15);
-        } else {
-          window.alert('We could not find that location - try entering a more' + ' specific place.');
-        }
-      });
-    }
-  }
+// REMOVED FOR THIS VERSION BUT MAY USE LATER
+  // // Zooms into a specific area from the User's input
+  // function zoomToArea() {
+  //   var geocoder = new google.maps.Geocoder();
+  //   var address = document.getElementById('zoom-to-area-text').value;
+  //   if (address == '') {
+  //     window.alert('You must enter an area, or address.')
+  //   } else {
+  //     geocoder.geocode(
+  //     { address: address,
+  //       componentRestrictions: {locality: 'San Francisco'}
+  //     }, function(results, status) {
+  //       if (status == google.maps.GeocoderStatus.OK) {
+  //         map.setCenter(results[0].geometry.location);
+  //         map.setZoom(15);
+  //       } else {
+  //         window.alert('We could not find that location - try entering a more' + ' specific place.');
+  //       }
+  //     });
+  //   }
+  // }
 
   // Allows User to input a desired travel time & only show listings within that travel time
   function searchWithinTime() {

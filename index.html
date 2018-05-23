@@ -5,64 +5,58 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Books by the Bay Map</title>
-    
+
     <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Neuton" rel="stylesheet">
 
     <link rel="stylesheet" href="css/main.css">
-     <!-- <style type="text/css">
-     </style> -->
+    <!-- <style type="text/css">
+    </style> -->
   </head>
   <body>
-  <div class="container">
-    <div class="options-box">
-      <h1>Books by the Bay Map</h1>
-      <h3>Find a bookstore in San Francisco</h3>
-      <div>
-        <input id="show-bookstores" type="button" value="Show Bookstores">
-        <input id="hide-bookstores" type="button" value="Hide Bookstores">
-        <div class="panel">
-          <ul data-bind="foreach: locationsList">
-            <li data-bind="text: title"></li>
-          </ul>
+    <div class="container">
+      <div class="options-box">
+        <h1>Books by the Bay Map</h1>
+        <h3>Find a bookstore in San Francisco</h3>
+        <div>
+          <input id="show-bookstores" type="button" value="Show Bookstores">
+          <input id="hide-bookstores" type="button" value="Hide Bookstores">
+          <div class="panel">
+            <ul data-bind="foreach: locationsList">
+              <li data-bind="text: title"></li>
+            </ul>
+          </div>
+        </div>
+        <hr>
+        <div>
+          <h3>Find Route</h3>
+          <span class="text"> Within </span>
+          <select id="max-duration">
+            <option value="10">10 min</option>
+            <option value="15">15 min</option>
+            <option value="30">30 min</option>
+            <option value="60">1 hour</option>
+          </select>
+          <select id="mode">
+            <option value="DRIVING">drive</option>
+            <option value="WALKING">walk</option>
+            <option value="BICYCLING">bike</option>
+            <option value="TRANSIT">transit ride</option>
+          </select>
+          <span class="text">of</span>
+            <input id="search-within-time-text" type="text" placeholder="Ex: Union Square or 333 Post St, San Francisco, CA">
+            <input id="search-within-time" type="button" value="Go">
         </div>
       </div>
-    <hr>
-    <div>
-      <h3>Filter by Neighborhood</h3>
-      <input id="zoom-to-area-text" type="text" placeholder="Enter your favorite neighborhood!">
-      <input id="zoom-to-area" type="button" value="Filter">
+      <!-- Places the map in the HTML -->
+      <div id="map"></div>
     </div>
-    <hr>
-    <div>
-      <h3>Find Route</h3>
-      <span class="text"> Within </span>
-      <select id="max-duration">
-        <option value="10">10 min</option>
-        <option value="15">15 min</option>
-        <option value="30">30 min</option>
-        <option value="60">1 hour</option>
-      </select>
-      <select id="mode">
-        <option value="DRIVING">drive</option>
-        <option value="WALKING">walk</option>
-        <option value="BICYCLING">bike</option>
-        <option value="TRANSIT">transit ride</option>
-      </select>
-      <span class="text">of</span>
-        <input id="search-within-time-text" type="text" placeholder="Ex: Union Square or 333 Post St, San Francisco, CA">
-        <input id="search-within-time" type="button" value="Go">
-    </div>
-  </div>
-    <!-- Places the map in the HTML-->
-    <div id="map"></div>
-  </div>
 
-  <!-- SCRIPTS -->
-   <script src='js/lib/knockout-3.4.2.js'></script>
-   <script src="js/app.js"></script>
-    <!-- Loads the JS API asynchronously.-->
-   <script async defer src="https://maps.googleapis.com/maps/api/js?libraries=places,geometry&v=3&key=AIzaSyCzPtzNkcOSWRwMjuDE1JgxnWYq0CLw69g&callback=initMap">
-  </script>
- </body>
+    <!-- SCRIPTS -->
+    <script src='js/lib/knockout-3.4.2.js'></script>
+    <script src='js/app.js'></script>
+    <!-- Loads the JS API asynchronously -->
+     <script async defer src="https://maps.googleapis.com/maps/api/js?libraries=places,geometry&v=3&key=AIzaSyCzPtzNkcOSWRwMjuDE1JgxnWYq0CLw69g&callback=initMap">
+    </script>
+  </body>
 </html>
